@@ -7,9 +7,17 @@ class Order < ActiveRecord::Base
         Barista.find(barista_orders.max_by{|barista| barista_orders.count(barista)}).name
     end  
     
-    def self.best_customer #this is not corrent.  we didn't finish.
-        all.max_by{|s| s.quantity}.barista.name
-    end 
+    def self.best_customer
+        hash= Hash.new(0)
+        self.all.map do |order|
+            if hash[order.customer_id] == hash[order.customer_id]
+                hash[order.customer_id] += order.quantity
+            else
+                hash[order.customer_id] += order.quantity
+            end
+    end
+    Customer.find(hash.key(hash.values.max)).name
+    end
     
     def print_details
         "#{customer.name} ordered #{quantity} of #{drink} from #{barista.name}."
